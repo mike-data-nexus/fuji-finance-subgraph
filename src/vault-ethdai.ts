@@ -7,8 +7,8 @@ import {
   SetActiveProvider as SetActiveProviderEvent,
   Switch as SwitchEvent,
   Unpaused as UnpausedEvent,
-  Withdraw as WithdrawEvent
-} from "../generated/VaultETHDAI/VaultETHDAI"
+  Withdraw as WithdrawEvent,
+} from "../generated/VaultETHDAI/VaultETHDAI";
 import {
   Borrow,
   Deposit,
@@ -18,137 +18,143 @@ import {
   SetActiveProvider,
   Switch,
   Unpaused,
-  Withdraw
-} from "../generated/schema"
+  Withdraw,
+} from "../generated/schema";
 
-export function handleBorrow(event: BorrowEvent): void {
-  let entity = new Borrow(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.userAddrs = event.params.userAddrs
-  entity.asset = event.params.asset
-  entity.amount = event.params.amount
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
+//DEPOSIT EVENT //
 export function handleDeposit(event: DepositEvent): void {
-  let entity = new Deposit(
+  let deposit = new Deposit(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.userAddrs = event.params.userAddrs
-  entity.asset = event.params.asset
-  entity.amount = event.params.amount
+  );
+  deposit.userAddrs = event.params.userAddrs;
+  deposit.asset = event.params.asset;
+  deposit.amount = event.params.amount;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  deposit.blockNumber = event.block.number;
+  deposit.blockTimestamp = event.block.timestamp;
+  deposit.transactionHash = event.transaction.hash;
 
-  entity.save()
+  deposit.save();
 }
 
+// BORROW EVENT //
+export function handleBorrow(event: BorrowEvent): void {
+  let borrow = new Borrow(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  borrow.userAddrs = event.params.userAddrs;
+  borrow.asset = event.params.asset;
+  borrow.amount = event.params.amount;
+
+  borrow.blockNumber = event.block.number;
+  borrow.blockTimestamp = event.block.timestamp;
+  borrow.transactionHash = event.transaction.hash;
+
+  borrow.save();
+}
+
+// WITHDRAW EVENT //
+export function handleWithdraw(event: WithdrawEvent): void {
+  let withdraw = new Withdraw(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  withdraw.userAddrs = event.params.userAddrs;
+  withdraw.asset = event.params.asset;
+  withdraw.amount = event.params.amount;
+
+  withdraw.blockNumber = event.block.number;
+  withdraw.blockTimestamp = event.block.timestamp;
+  withdraw.transactionHash = event.transaction.hash;
+
+  withdraw.save();
+}
+
+//PAYBACK OF THE ASSET //
+export function handlePayback(event: PaybackEvent): void {
+  let payback = new Payback(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  payback.userAddrs = event.params.userAddrs;
+  payback.asset = event.params.asset;
+  payback.amount = event.params.amount;
+
+  payback.blockNumber = event.block.number;
+  payback.blockTimestamp = event.block.timestamp;
+  payback.transactionHash = event.transaction.hash;
+
+  payback.save();
+}
+
+// OWNERSHIP TRANSFER OF ASSET //
 export function handleOwnershipTransferred(
   event: OwnershipTransferredEvent
 ): void {
-  let entity = new OwnershipTransferred(
+  let ownershipTransfered = new OwnershipTransferred(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.previousOwner = event.params.previousOwner
-  entity.newOwner = event.params.newOwner
+  );
+  ownershipTransfered.previousOwner = event.params.previousOwner;
+  ownershipTransfered.newOwner = event.params.newOwner;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  ownershipTransfered.blockNumber = event.block.number;
+  ownershipTransfered.blockTimestamp = event.block.timestamp;
+  ownershipTransfered.transactionHash = event.transaction.hash;
 
-  entity.save()
+  ownershipTransfered.save();
 }
 
+// PAUSE OF THE ASSET //
 export function handlePaused(event: PausedEvent): void {
-  let entity = new Paused(
+  let paused = new Paused(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.account = event.params.account
+  );
+  paused.account = event.params.account;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  paused.blockNumber = event.block.number;
+  paused.blockTimestamp = event.block.timestamp;
+  paused.transactionHash = event.transaction.hash;
 
-  entity.save()
-}
-
-export function handlePayback(event: PaybackEvent): void {
-  let entity = new Payback(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.userAddrs = event.params.userAddrs
-  entity.asset = event.params.asset
-  entity.amount = event.params.amount
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleSetActiveProvider(event: SetActiveProviderEvent): void {
-  let entity = new SetActiveProvider(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.providerAddr = event.params.providerAddr
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
-}
-
-export function handleSwitch(event: SwitchEvent): void {
-  let entity = new Switch(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.vault = event.params.vault
-  entity.fromProviderAddrs = event.params.fromProviderAddrs
-  entity.toProviderAddr = event.params.toProviderAddr
-  entity.Debtamount = event.params.Debtamount
-  entity.Collattamount = event.params.Collattamount
-
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
-
-  entity.save()
+  paused.save();
 }
 
 export function handleUnpaused(event: UnpausedEvent): void {
-  let entity = new Unpaused(
+  let unpaused = new Unpaused(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.account = event.params.account
+  );
+  unpaused.account = event.params.account;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  unpaused.blockNumber = event.block.number;
+  unpaused.blockTimestamp = event.block.timestamp;
+  unpaused.transactionHash = event.transaction.hash;
 
-  entity.save()
+  unpaused.save();
 }
 
-export function handleWithdraw(event: WithdrawEvent): void {
-  let entity = new Withdraw(
+export function handleSetActiveProvider(event: SetActiveProviderEvent): void {
+  let setActiveProvider = new SetActiveProvider(
     event.transaction.hash.concatI32(event.logIndex.toI32())
-  )
-  entity.userAddrs = event.params.userAddrs
-  entity.asset = event.params.asset
-  entity.amount = event.params.amount
+  );
+  setActiveProvider.providerAddr = event.params.providerAddr;
 
-  entity.blockNumber = event.block.number
-  entity.blockTimestamp = event.block.timestamp
-  entity.transactionHash = event.transaction.hash
+  setActiveProvider.blockNumber = event.block.number;
+  setActiveProvider.blockTimestamp = event.block.timestamp;
+  setActiveProvider.transactionHash = event.transaction.hash;
 
-  entity.save()
+  setActiveProvider.save();
+}
+
+export function handleSwitch(event: SwitchEvent): void {
+  let _switch = new Switch(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  _switch.vault = event.params.vault;
+  _switch.fromProviderAddrs = event.params.fromProviderAddrs;
+  _switch.toProviderAddr = event.params.toProviderAddr;
+  _switch.Debtamount = event.params.Debtamount;
+  _switch.Collattamount = event.params.Collattamount;
+
+  _switch.blockNumber = event.block.number;
+  _switch.blockTimestamp = event.block.timestamp;
+  _switch.transactionHash = event.transaction.hash;
+
+  _switch.save();
 }
